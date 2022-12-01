@@ -1,65 +1,95 @@
 /**
-*@jest-environment jsdom
-*/
+ *@jest-environment jsdom
+ */
+import { jest, test, describe } from "@jest/globals";
+import { IMovie } from "../models/IMovie";
+import * as movieAppFunctions from "../movieApp";
+import * as service from "./../services/movieservice";
+import { mockData } from "./../services/__mocks__/movieservice";
 
-import * as movieAppFunctions  from '../movieApp';
-import { getData } from '../services/movieservice';
-
-
-test ('should call handleSubmit when submit', ()=>{
-    document.body.innerHTML = `<form id="searchForm">
+test("should call handleSubmit when submit", () => {
+  document.body.innerHTML = `<form id="searchForm">
     <input type="text" id="searchText" placeholder="Skriv titel här" />
     <button type="submit" id="search">Sök</button> </form>`;
 
-    let spy = jest.spyOn(movieAppFunctions,'handleSubmit').mockImplementation(
-        ()=> 
-        new Promise((resolve) => {
-            resolve();
-        })
-    )
-   
-    movieAppFunctions.init();
-    (document.getElementById('searchForm') as HTMLFormElement).submit();
-    expect(spy).toHaveBeenCalled();
+  let spy = jest.spyOn(movieAppFunctions, "handleSubmit").mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        resolve();
+      })
+  );
+
+  movieAppFunctions.init();
+  (document.getElementById("searchForm") as HTMLFormElement).submit();
+  expect(spy).toHaveBeenCalled();
 });
 
-describe ('handleSubmit', ()=> {
-    document.body.innerHTML= '';
-    // test('should call getData', async ()=> {
-    //     let searchText = (document.getElementById("searchText") as HTMLInputElement);
-    //     searchText.value = 'Shrek 3';
+/************************************************************************************/
+// jest.mock("./../services/movieservice.ts");
+// describe("handleSubmit", () => {
+//   document.body.innerHTML = "";
 
-    //     let spy = jest.spyOn(movieAppFunctions, 'get').mockResultValue();
-            
+//   test("should call createHtml", async () => {
+//     // let searchText: string = "test";
+//     document.body.innerHTML = `<div id='container></div>`;
+//     let container: HTMLDivElement = document.getElementById(
+//       "movie-container"
+//     ) as HTMLDivElement;
 
-    // });
-    test('should call create html', async ()=> {
+//     let spy = jest.spyOn(movieAppFunctions, "createHtml").mockImplementation(
+//       () =>
+//         new Promise((resolve) => {
+//           resolve(container);
+//         })
+//     );
 
-        expect.assertions(1);
-        document.body.innerHTML = `<input type="text" id="searchText" 
-        placeholder="Skriv titel här" />`;
+//     await movieAppFunctions.handleSubmit();
+//     expect(spy).toHaveBeenCalled();
+//   });
 
-        let searchText = (document.getElementById("searchText") as HTMLInputElement);
-        searchText.value = 'Shrek 3';
+//   // test('should call createHtml', ()=> {
+//   //     let movies: IMovie[] = mockData;
 
-        let movies = await getData('searchText');
-        let container: HTMLDivElement = document.getElementById(
-            "movie-container"
-          ) as HTMLDivElement;
+//   //     try{
+//   //         movies = await
+//   //     }
 
-        let spy = jest.spyOn(movieAppFunctions,'displayNoResult').mockImplementation(
-            ()=> 
-            new Promise((resolve) => {
-                resolve(container);
-            })
-        )
+//   // });
+//   document.body.innerHTML = "";
+// });
 
-        expect(spy).toHaveBeenCalled();
+jest.mock("./../services/movieservice.ts");
+beforeEach(() => {
+  jest.resetModules();
+  jest.resetAllMocks();
+});
+test("should create html for array", () => {
+  document.body.innerHTML = "";
+  document.body.innerHTML = `<div id='testContainer'></div>`;
+  let testContainer = document.getElementById(
+    "testContainer"
+  ) as HTMLDivElement;
 
-    });
-    // test('should call displayNoResults');
+  let movies: IMovie[] = mockData;
+
+  movieAppFunctions.createHtml(movies, testContainer);
+
+  expect(document.querySelectorAll("h3").length).toBe(3);
+  expect(document.querySelectorAll("div.movie").length).toBe(3);
+  expect(document.querySelectorAll("img").length).toBe(3);
+
+  document.body.innerHTML = "";
 });
 
-// test('should createHtml');
+/********************************* Funkar *********************************************** */
 
-// går displayNoResult att testa? test('')
+test("should change p-tag", () => {
+  document.body.innerHTML = `<div id='testContainer'></div> `;
+  let testContainer = document.getElementById(
+    "testContainer"
+  ) as HTMLDivElement;
+
+  movieAppFunctions.displayNoResult(testContainer);
+
+  expect(document.querySelectorAll("p").length).toBe(1);
+});

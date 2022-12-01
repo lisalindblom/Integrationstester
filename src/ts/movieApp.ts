@@ -63,4 +63,5 @@ export const displayNoResult = (container: HTMLDivElement) => {
   noMessage.innerHTML = "Inga sökresultat att visa";
 
   container.appendChild(noMessage);
+  
 };
