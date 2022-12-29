@@ -24,9 +24,20 @@ export const mockData: IMovie[] = [
   },
 ];
 
-export const getData = async (searchText: string): Promise<IMovie[]> => {
-  return new Promise((resolve, reject) => {
+export const getData = async (): Promise<IMovie[]> => {
+  return new Promise((resolve) => {
     resolve(mockData);
-    reject([]);
   });
 };
+// export const getData = async (searchText: string): Promise<IMovie[]> => {
+//   return new Promise((resolve) => {
+//     resolve(mockData);
+//   });
+// };
+// jest.mock("axios", () => ({
+//     get: async () => {
+//       return new Promise((resolve) => {
+//         resolve({ data: { Search: mockData } });
+//       });
+//     },
+//   }));

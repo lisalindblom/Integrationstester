@@ -2,32 +2,10 @@
  *@jest-environment jsdom
  */
 
+import { jest, test, describe, expect } from "@jest/globals";
 import { IMovie } from "../models/IMovie";
 import { getData } from "../services/movieservice";
-
-let mockData: IMovie[] = [
-  {
-    Title: "Shrek",
-    imdbID: "1",
-    Type: "genre",
-    Poster: "poster",
-    Year: "2003",
-  },
-  {
-    Title: "Shrek 2",
-    imdbID: "2",
-    Type: "genre",
-    Poster: "poster",
-    Year: "2007",
-  },
-  {
-    Title: "Shrek 3",
-    imdbID: "3",
-    Type: "genre",
-    Poster: "poster",
-    Year: "2010",
-  },
-];
+import { mockData } from "../services/__mocks__/movieservice";
 
 jest.mock("axios", () => ({
   get: async () => {
@@ -37,21 +15,41 @@ jest.mock("axios", () => ({
   },
 }));
 
-// describe('')
+describe("should test getData", () => {
+  test("should get mock data", async () => {
+    expect.assertions(3);
+    let movieText: string = "movies";
 
-test("should get mock data", async () => {
-  expect.assertions(3);
-  let movieText: string = "movies";
+    let movie: IMovie[] = await getData(movieText);
 
-  let movie = await getData(movieText);
+    expect(movie.length).toBe(3);
+    expect(movie[2].Year).toBe("2010");
+    expect(movie[0].Title).toBe("Shrek");
+  });
 
-  expect(movie.length).toBe(3);
-  expect(movie[2].Year).toBe("2010");
-  expect(movie[0].Title).toBe("Shrek");
+  // test("should catch wrong data", async () => {
+  //   let movieText: string = " ";
+
+  //   let movie: IMovie[] = await getData(movieText);
+
+  //   expect(movie).toEqual([]);
+  //   expect(movie.length).toBe(0);
+  // });
+
+  // jest.mock("axios");
+  // const mockAxios = axios as jest.Mocked<typeof axios>;
+  // test("should catch wrong data", async () => {
+  //   mockAxios.get.mockRejectedValue({ data: { Search: mockData } });
+
+  //   // (axios.get as jest.Mock).mockReturnValueOnce({
+  //   //   data: { Search: mockData },
+  //   // });
+
+  //   // (axios.get as jest.Mock).mockRejectedValue({data: {mockData}});
+  //   let searchText: string = "";
+
+  //   let movie = await getData(searchText);
+  //   expect(movie).toEqual([]);
+  //   expect(movie.length).toBe(0);
+  // });
 });
-
-// test('should catch wrong data', ()=> {
-//   let movieText: string = "movies";
-//   let movies: IMovie[] = [];
-//   if()
-// });

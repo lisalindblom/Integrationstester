@@ -24,53 +24,21 @@ test("should call handleSubmit when submit", () => {
   expect(spy).toHaveBeenCalled();
 });
 
-/************************************************************************************/
-// jest.mock("./../services/movieservice.ts");
-// describe("handleSubmit", () => {
-//   document.body.innerHTML = "";
-
-//   test("should call createHtml", async () => {
-//     // let searchText: string = "test";
-//     document.body.innerHTML = `<div id='container></div>`;
-//     let container: HTMLDivElement = document.getElementById(
-//       "movie-container"
-//     ) as HTMLDivElement;
-
-//     let spy = jest.spyOn(movieAppFunctions, "createHtml").mockImplementation(
-//       () =>
-//         new Promise((resolve) => {
-//           resolve(container);
-//         })
-//     );
-
-//     await movieAppFunctions.handleSubmit();
-//     expect(spy).toHaveBeenCalled();
-//   });
-
-//   // test('should call createHtml', ()=> {
-//   //     let movies: IMovie[] = mockData;
-
-//   //     try{
-//   //         movies = await
-//   //     }
-
-//   // });
-//   document.body.innerHTML = "";
-// });
-
+/******************************funkar ****************************************** */
 jest.mock("./../services/movieservice.ts");
 beforeEach(() => {
   jest.resetModules();
   jest.resetAllMocks();
 });
-test("should create html for array", () => {
+test("should create html for array", async () => {
   document.body.innerHTML = "";
   document.body.innerHTML = `<div id='testContainer'></div>`;
   let testContainer = document.getElementById(
     "testContainer"
   ) as HTMLDivElement;
 
-  let movies: IMovie[] = mockData;
+  let searchText = "Shrek";
+  let movies: IMovie[] = await service.getData(searchText);
 
   movieAppFunctions.createHtml(movies, testContainer);
 
@@ -93,3 +61,47 @@ test("should change p-tag", () => {
 
   expect(document.querySelectorAll("p").length).toBe(1);
 });
+
+// jest.mock("./../services/movieservice.ts");
+// describe("handleSubmit", () => {
+//   document.body.innerHTML = "";
+
+//   test("should call createHtml", async () => {
+//     // let searchText: string = "test";
+//     document.body.innerHTML = `<form id="searchForm">
+//       <input type="text" id="searchText" placeholder="Skriv titel här" />
+//       <button type="submit" id="search">Sök</button> </form> <div id='container></div>`;
+
+//     let container: HTMLDivElement = document.getElementById(
+//       "movie-container"
+//     ) as HTMLDivElement;
+
+//     let searchText = document.getElementById("searchText") as HTMLInputElement;
+//     let movies: IMovie[] = mockData;
+
+//     let spy = jest.spyOn(movieAppFunctions, "createHtml").mockImplementation(
+//       () =>
+//         new Promise((resolve) => {
+//           resolve(container);
+//         })
+//     );
+
+//     await movieAppFunctions.handleSubmit();
+//     expect(spy).toHaveBeenCalled();
+//   });
+
+//   jest.mock("./../services/movieservice.ts");
+//   test("should call createHtml", () => {
+//     let movies: IMovie[] = mockData;
+
+//     document.body.innerHTML = `<div id='container></div>`;
+//     let container: HTMLDivElement = document.getElementById(
+//       "movie-container"
+//     ) as HTMLDivElement;
+
+//     movieAppFunctions.handleSubmit();
+
+//     expect(document.querySelectorAll("div.container")).toBe("");
+//   });
+//   document.body.innerHTML = "";
+// });
